@@ -35,19 +35,47 @@ app.post("/texts/:id/status", (req, res) => {
 
 //get library with optional status filter
 app.get("/library", (req, res) => {
-  const { status } = req.query;
+  const { status, search } = req.query;
 
   let query = `
     SELECT texts.*, text_status.status
     FROM texts
-    LEFT JOIN text_status ON texts.id = text_status.text_id
   `;
 
+  const conditions = [];
   const params = [];
 
+  //have to specify INNER JOIN to prevent all texts from appearing in the search when there is a status selected
   if (status) {
-    query += " WHERE text_status.status = ?";
+    query += `
+      INNER JOIN text_status
+      ON texts.id = text_status.text_id
+    `;
+    conditions.push("text_status.status = ?");
     params.push(status);
+  } else {
+    //LEFT JOIN still here so that the two tables can join even when some texts have null status
+    query += `
+      LEFT JOIN text_status
+      ON texts.id = text_status.text_id
+    `;
+  }
+
+  if (search) {
+    conditions.push(`
+      LOWER(texts.author) LIKE ?
+      OR LOWER (texts.city) LIKE ?
+      OR LOWER (texts.country) LIKE ?
+      OR LOWER (texts.title) LIKE ?
+      OR LOWER (texts.date) LIKE ?
+    `);
+    
+    const term = `%${search.toLowerCase()}%`;
+    params.push(term, term, term, term, term);
+  }
+
+  if (conditions.length > 0) {
+    query += " WHERE " + conditions.join(" AND ");
   }
 
   db.all(query, params, (err, rows) => {
