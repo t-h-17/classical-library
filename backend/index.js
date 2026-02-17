@@ -35,7 +35,7 @@ app.post("/texts/:id/status", (req, res) => {
 
 //get library with optional status filter
 app.get("/library", (req, res) => {
-  const { status, search } = req.query;
+  const { status, search, sort, direction } = req.query;
 
   let query = `
     SELECT texts.*, text_status.status
@@ -61,6 +61,7 @@ app.get("/library", (req, res) => {
     `;
   }
 
+  //allows the search to look through all fields, case-insensitively
   if (search) {
     conditions.push(`
       LOWER(texts.author) LIKE ?
@@ -74,9 +75,13 @@ app.get("/library", (req, res) => {
     params.push(term, term, term, term, term);
   }
 
+  //dynamically builds the WHERE clause based on filter and/or search
   if (conditions.length > 0) {
     query += " WHERE " + conditions.join(" AND ");
   }
+
+  //sorts by author, date, or title in either ascending or descending order, defaults to author ASC
+  query += ` ORDER BY texts.${sort} ${direction.toUpperCase()}`;
 
   db.all(query, params, (err, rows) => {
     if (err) return res.status(500).json(err);

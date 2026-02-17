@@ -2,7 +2,7 @@ import { setTextStatus } from "../api";
 
 function TextItem({ text, onStatusChange }) {
   const handleClick = async status => {
-    await setTextStatus(text.id, status);
+    await (text.status === status ? setTextStatus(text.id, null) : setTextStatus(text.id, status));
     onStatusChange();
   };
 

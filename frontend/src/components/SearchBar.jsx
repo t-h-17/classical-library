@@ -6,7 +6,7 @@ function SearchBar({ search, setSearch }) {
             value={search}
             onChange={e => setSearch(e.target.value)}
             style={{
-                paddingBottom
+                paddingBottom: "8px"
             }}
         />
     );
