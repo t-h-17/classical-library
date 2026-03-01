@@ -1,10 +1,10 @@
 function Filters({ status, setStatus }) {
   return (
-    <div style={{ marginBottom: "16px" }}>
-      <button onClick={() => setStatus(null)}>All</button>
-      <button onClick={() => setStatus("read")}>Read</button>
-      <button onClick={() => setStatus("reading")}>Reading</button>
-      <button onClick={() => setStatus("want")}>Want</button>
+    <div style={{ margin: "8px 0" }}>
+      <button style={{marginRight: "2px", height: "32px", backgroundColor: status === null ? "lightGray" : "white", fontFamily: "Times New Roman"}} onClick={() => setStatus(null)}>All</button>
+      <button style={{marginRight: "2px", height: "32px", backgroundColor: status === "read" ? "lightGray" : "white", fontFamily: "Times New Roman"}} onClick={() => setStatus("read")}>Read</button>
+      <button style={{marginRight: "2px", height: "32px", backgroundColor: status === "reading" ? "lightGray" : "white", fontFamily: "Times New Roman"}} onClick={() => setStatus("reading")}>Reading</button>
+      <button style={{marginRight: "2px", height: "32px", backgroundColor: status === "want" ? "lightGray" : "white", fontFamily: "Times New Roman"}} onClick={() => setStatus("want")}>Want</button>
     </div>
   );
 }

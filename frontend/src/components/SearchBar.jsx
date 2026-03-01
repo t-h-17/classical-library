@@ -6,7 +6,7 @@ function SearchBar({ search, setSearch }) {
             value={search}
             onChange={e => setSearch(e.target.value)}
             style={{
-                paddingBottom: "8px"
+                padding: "8px 5%", textAlign: "center", fontFamily: "Times New Roman", border: "1px solid black", borderRadius: "4px"
             }}
         />
     );

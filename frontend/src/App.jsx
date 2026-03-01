@@ -19,6 +19,7 @@ function App() {
 
   useEffect(() => {
     let url = "http://localhost:3001/library";
+    document.body.style.backgroundColor = "#E0C9A6";
 
     const params = new URLSearchParams();
     if (status) params.append("status", status);
@@ -36,16 +37,25 @@ function App() {
   }, [status, search, sort, direction]);
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-      <h1>Classical Library</h1>
+    <div
+      style={{
+        maxWidth: "600px",
+        width: "100%",
+        margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "stretch"
+      }}>
+
+      <h1 style={{fontFamily: "Papyrus"}}>Classical Library</h1>
 
       <SearchBar search={search} setSearch={setSearch} />
-      
-      <Sort sort={sort} setSort={setSort} direction={direction} setDirection={setDirection} />
 
       <Filters status={status} setStatus={setStatus} />
 
-      <TextList texts={texts} refresh={loadTexts} />
+      <Sort style={{margin: "0"}} sort={sort} setSort={setSort} direction={direction} setDirection={setDirection} />
+
+      <TextList texts={texts} refresh={loadTexts}/>
     </div>
   );
 }

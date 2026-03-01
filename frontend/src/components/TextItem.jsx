@@ -1,8 +1,16 @@
 import { setTextStatus } from "../api";
+import { useState } from "react";
 
 function TextItem({ text, onStatusChange }) {
-  const handleClick = async status => {
-    await (text.status === status ? setTextStatus(text.id, null) : setTextStatus(text.id, status));
+  const [status, setStatus] = useState(text.status);
+
+  const handleClick = async newStatus => {
+    const updatedStatus = status === newStatus ? null : newStatus;
+    //to update the button color immediately without waiting for the server response
+    setStatus(updatedStatus);
+
+    //to update the status in the database
+    await setTextStatus(text.id, updatedStatus);
     onStatusChange();
   };
 
@@ -19,9 +27,9 @@ function TextItem({ text, onStatusChange }) {
       </div>
 
       <div style={{ marginTop: "6px" }}>
-        <button style={{ backgroundColor: text.status === "read" ? "lightgray" : "white" }} onClick={() => handleClick("read")}>Read</button>
-        <button style={{ backgroundColor: text.status === "reading" ? "lightgray" : "white" }} onClick={() => handleClick("reading")}>Reading</button>
-        <button style={{ backgroundColor: text.status === "want" ? "lightgray" : "white" }} onClick={() => handleClick("want")}>Want</button>
+        <button style={{ backgroundColor: status === "read" ? "lightgray" : "white" }} onClick={() => handleClick("read")}>Read</button>
+        <button style={{ backgroundColor: status === "reading" ? "lightgray" : "white" }} onClick={() => handleClick("reading")}>Reading</button>
+        <button style={{ backgroundColor: status === "want" ? "lightgray" : "white" }} onClick={() => handleClick("want")}>Want</button>
       </div>
     </div>
   );
